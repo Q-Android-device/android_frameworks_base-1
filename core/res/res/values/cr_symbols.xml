@@ -112,4 +112,10 @@
 
   <!-- Whether device ignores the RSSNR signal implementation -->
   <java-symbol type="bool" name="config_ignoreRssnrSignalLevel" />
+  
+  <!-- Battery/Notification Led -->
+  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
+  <java-symbol type="bool" name="config_multiColorBatteryLed" />
+  <java-symbol type="bool" name="config_FastChargingLedSupported" />
+  <java-symbol type="integer" name="config_notificationsFastBatteryARGB" />
 </resources>
