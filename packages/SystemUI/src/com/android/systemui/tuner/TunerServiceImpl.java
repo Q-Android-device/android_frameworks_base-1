@@ -35,6 +35,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.systemui.BatteryMeterView;
 import com.android.systemui.DemoMode;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.settings.CurrentUserTracker;
@@ -79,6 +80,10 @@ public class TunerServiceImpl extends TunerService {
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION,
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
             ClockController.STATUS_BAR_CLOCK,
+            BatteryMeterView.STATUS_BAR_BATTERY_STYLE,
+            Clock.CLOCK_STYLE,
+            ClockController.CLOCK_POSITION,
+            NavigationBarView.NAVIGATION_BAR_MENU_ARROW_KEYS,
             NotificationPanelView.DOUBLE_TAP_SLEEP_GESTURE,
             NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
             QSTileHost.TILES_SETTING,
