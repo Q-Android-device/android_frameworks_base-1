@@ -9164,6 +9164,25 @@ public final class Settings {
         public static final String NAVBAR_LAYOUT_VIEWS = "navbar_layout_views";
 
         /**
+         * The default location backends for microG's UnifiedNlp implementation
+         *
+         * @hide
+         */
+        public static final String MICROG_DEFAULT_LOCATION_BACKENDS =
+                "default_location_backends";
+
+        /**
+         * The default geocoder backends for microG's UnifiedNlp implementation
+         *
+         * @hide
+         */
+        public static final String MICROG_DEFAULT_GEOCODER_BACKENDS =
+                "default_geocoder_backends";
+
+        private static final Validator MICROG_DEFAULT_BACKENDS_VALIDATOR =
+                ANY_STRING_VALIDATOR; // TODO: Custom validator
+
+        /**
          * Inverse navigation bar layout
          * @hide
          */
@@ -9313,6 +9332,8 @@ public final class Settings {
             NAVIGATION_MODE,
             AWARE_ENABLED,
             SKIP_GESTURE_COUNT,
+            MICROG_DEFAULT_LOCATION_BACKENDS,
+            MICROG_DEFAULT_GEOCODER_BACKENDS,
             SILENCE_ALARMS_GESTURE_COUNT,
             SILENCE_NOTIFICATION_GESTURE_COUNT,
             SILENCE_CALL_GESTURE_COUNT,
@@ -9509,6 +9530,8 @@ public final class Settings {
             VALIDATORS.put(DARK_MODE_DIALOG_SEEN, BOOLEAN_VALIDATOR);
             VALIDATORS.put(UI_NIGHT_MODE, UI_NIGHT_MODE_VALIDATOR);
             VALIDATORS.put(GLOBAL_ACTIONS_PANEL_ENABLED, GLOBAL_ACTIONS_PANEL_ENABLED_VALIDATOR);
+            VALIDATORS.put(MICROG_DEFAULT_LOCATION_BACKENDS, MICROG_DEFAULT_BACKENDS_VALIDATOR);
+            VALIDATORS.put(MICROG_DEFAULT_GEOCODER_BACKENDS, MICROG_DEFAULT_BACKENDS_VALIDATOR);
             VALIDATORS.put(AWARE_LOCK_ENABLED, AWARE_LOCK_ENABLED_VALIDATOR);
             VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
         }
