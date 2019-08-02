@@ -1002,9 +1002,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                         mScreenBrightnessDimConfig), mScreenBrightnessRangeMinimum);
                 mBrightnessReasonTemp.addModifier(BrightnessReason.MODIFIER_DIMMED);
             }
-            if (!mAppliedDimming) {
-                slowChange = false;
-            }
+            slowChange = true;
             mAppliedDimming = true;
         } else if (mAppliedDimming) {
             slowChange = false;
