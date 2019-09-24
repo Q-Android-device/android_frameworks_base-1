@@ -90,7 +90,7 @@ public class BatteryMeterView extends LinearLayout implements
     private final @StyleRes int mPercentageStyleId;
     private int mTextColor;
     private int mLevel;
-    private int mShowPercentMode = MODE_DEFAULT;
+    private int mShowPercentMode = MODE_ON;
     private boolean mForceShowPercent;
     private boolean mShowPercentAvailable;
     // Some places may need to show the battery conditionally, and not obey the tuner
