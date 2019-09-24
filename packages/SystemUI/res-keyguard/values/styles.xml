@@ -24,7 +24,7 @@
         <item name="android:textSize">@dimen/kg_status_line_font_size</item>
     </style>
     <style name="Keyguard.TextView.EmergencyButton" parent="@android:style/DeviceDefault.ButtonBar">
-        <item name="android:textColor">?attr/wallpaperTextColorSecondary</item>
+        <item name="android:textColor">#e16e36</item>
         <item name="android:textSize">@dimen/kg_status_line_font_size</item>
         <item name="android:background">@null</item>
     </style>
@@ -51,7 +51,7 @@
     <style name="Widget.TextView.NumPadKey.Klondike" parent="Widget.TextView.NumPadKey">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
-        <item name="android:textColor">?attr/wallpaperTextColorSecondary</item>
+        <item name="android:textColor">#e16e36</item>
         <item name="android:paddingBottom">0dp</item>
     </style>
 
