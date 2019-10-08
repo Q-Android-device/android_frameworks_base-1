@@ -93,6 +93,7 @@
     <string name="tuner_keyguard_battery_percent_summary">Force show battery percent in status bar on charging</string>
     <string name="tuner_keyguard_show_battery_temp_title">Show battery temperature</string>
     <string name="tuner_keyguard_show_battery_temp_summary">Show battery temperature value</string>
+    <string name="tuner_battery_location_bar">Show battery in status bar</string>
 
     <!-- USB tethering QS tile -->
     <string name="quick_settings_usb_tether_label">USB tethering</string>

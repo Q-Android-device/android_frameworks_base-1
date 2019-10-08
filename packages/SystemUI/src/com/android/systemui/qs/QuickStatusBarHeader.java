@@ -31,10 +31,12 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.AlarmClock;
 import android.provider.DeviceConfig;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.service.notification.ZenModeConfig;
 import android.text.format.DateUtils;
@@ -149,6 +151,13 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private PrivacyItemController mPrivacyItemController;
 
+    // omni additions start
+    private boolean mLandscape;
+    private boolean mHeaderImageEnabled;
+    private boolean mForceHideQsStatusBar;
+    private BatteryMeterView mBatteryMeterView;
+    public static final String QS_BATTERY_LOCATION_BAR = "qs_battery_location_bar";
+
     private static final String SHOW_QS_CLOCK =
             "system:" + Settings.System.SHOW_QS_CLOCK;
 
@@ -197,6 +206,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mPrivacyItemController = privacyItemController;
         mDualToneHandler = new DualToneHandler(
                 new ContextThemeWrapper(context, R.style.QSHeaderTheme));
+        mOmniSettingsObserver.observe();
     }
 
     @Override
@@ -242,11 +252,19 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mNextAlarmIcon.setImageTintList(ColorStateList.valueOf(fillColor));
         mRingerModeIcon.setImageTintList(ColorStateList.valueOf(fillColor));
 
+        mBatteryMeterView = findViewById(R.id.battery);
+        mBatteryMeterView.setForceShowPercent(true);
+        mBatteryMeterView.setIgnoreTunerUpdates(true);
+        mBatteryMeterView.setOnClickListener(this);
+        mBatteryMeterView.setPercentShowMode(BatteryMeterView.MODE_ESTIMATE);
+
         mClockView = findViewById(R.id.clock);
         mClockView.setOnClickListener(this);
         mClockView.setQsHeader();
         mDateView = findViewById(R.id.date);
         mSpace = findViewById(R.id.space);
+
+        mDateView.setOnClickListener(this);
 
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
@@ -360,11 +378,12 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateResources();
-
         // Update color schemes in landscape to use wallpaperTextColor
         boolean shouldUseWallpaperTextColor =
                 newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
         mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+
+        updateStatusbarProperties();
     }
 
     @Override
@@ -493,6 +512,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         super.onAttachedToWindow();
         mStatusBarIconController.addIconGroup(mIconManager);
         requestApplyInsets();
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, QSFooterImpl.QS_SHOW_DRAG_HANDLE);
+        tunerService.addTunable(this, QS_BATTERY_LOCATION_BAR);
     }
 
     @Override
@@ -585,6 +608,15 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         } else if (v == mRingerContainer && mRingerContainer.isVisibleToUser()) {
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                     Settings.ACTION_SOUND_SETTINGS), 0);
+        } else if (v == mBatteryMeterView) {
+            Dependency.get(ActivityStarter.class).postStartActivityDismissingKeyguard(new Intent(
+                    Intent.ACTION_POWER_USAGE_SUMMARY),0);
+        } else if (v == mDateView) {
+            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+            builder.appendPath("time");
+            builder.appendPath(Long.toString(System.currentTimeMillis()));
+            Intent todayIntent = new Intent(Intent.ACTION_VIEW, builder.build());
+            Dependency.get(ActivityStarter.class).postStartActivityDismissingKeyguard(todayIntent, 0);
         }
     }
 
@@ -626,6 +658,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         float intensity = getColorIntensity(colorForeground);
         int fillColor = mDualToneHandler.getSingleColor(intensity);
         mBatteryRemainingIcon.onDarkChanged(tintArea, intensity, fillColor);
+
+        // Use SystemUI context to get battery meter colors, and let it use the default tint (white)
+        mBatteryMeterView.setColorsFromContext(mHost.getContext());
+        mBatteryMeterView.onDarkChanged(new Rect(), 0, DarkIconDispatcher.DEFAULT_ICON_TINT);
     }
 
     public void setCallback(Callback qsPanelCallback) {
@@ -666,5 +702,30 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     public void onTuningChanged(String key, String newValue) {
         mClockView.setClockVisibleByUser(newValue == null ? true :
                 Integer.valueOf(newValue) != 0);
+
+        if (QSFooterImpl.QS_SHOW_DRAG_HANDLE.equals(key)) {
+            mHideDragHandle = newValue != null && Integer.parseInt(newValue) == 0;
+            updateResources();
+        }
+        if (QS_BATTERY_LOCATION_BAR.equals(key)) {
+            boolean showBatteryInBar = newValue != null && Integer.parseInt(newValue) == 1;
+            mBatteryMeterView.setVisibility(showBatteryInBar ? View.VISIBLE : View.GONE);
+            mBatteryRemainingIcon.setVisibility(showBatteryInBar ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    private void updateSettings() {
+        mHeaderImageEnabled = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.OMNI_STATUS_BAR_CUSTOM_HEADER, 0,
+                UserHandle.USER_CURRENT) == 1;
+        updateResources();
+        updateStatusbarProperties();
+    }
+
+    // Update color schemes in landscape to use wallpaperTextColor
+    private void updateStatusbarProperties() {
+        boolean shouldUseWallpaperTextColor = (mLandscape || mForceHideQsStatusBar) && !mHeaderImageEnabled;
+        mBatteryMeterView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+        mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
     }
 }

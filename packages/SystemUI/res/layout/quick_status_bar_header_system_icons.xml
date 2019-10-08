@@ -46,14 +46,20 @@
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.StatusBar.Clock"
         systemui:showDark="false" />
-    </LinearLayout>
-
-    <android.widget.Space
+		
+	<android.widget.Space
         android:id="@+id/space"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:visibility="gone" />
+        android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal" />
+
+    <com.android.systemui.BatteryMeterView
+        android:id="@+id/battery"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical|end"
+        android:visibility="gone" />	
 
     <LinearLayout
         android:layout_width="0dp"
@@ -66,8 +72,7 @@
         android:id="@+id/network_traffic_holder"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center_vertical|end"
-        >
+        android:gravity="center_vertical|end" >
 
         <org.lineageos.internal.statusbar.NetworkTraffic
             android:id="@+id/network_traffic"
@@ -80,5 +85,4 @@
 
     <include layout="@layout/ongoing_privacy_chip" />
 
-    </LinearLayout>
 </LinearLayout>
