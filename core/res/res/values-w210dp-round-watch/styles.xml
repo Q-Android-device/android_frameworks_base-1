@@ -16,7 +16,7 @@
 
 <resources>
     <style name="TextAppearance.Toast">
-        <item name="fontFamily">roboto</item>
+        <item name="fontFamily">@string/config_bodyFontFamily</item>
         <item name="textSize">15sp</item>
     </style>
 </resources>

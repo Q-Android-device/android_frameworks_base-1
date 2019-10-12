@@ -16,7 +16,7 @@
 
 <resources>
     <style name="TextAppearance.Toast">
-        <item name="fontFamily">sans-serif-regular</item>
+        <item name="fontFamily">@string/config_bodyFontFamily</item>
         <item name="textSize">13sp</item>
     </style>
 </resources>
