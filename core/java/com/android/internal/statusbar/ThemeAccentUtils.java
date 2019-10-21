@@ -74,7 +74,6 @@ public class ThemeAccentUtils {
         "com.accents.twitterblue", // 46
         "com.accents.xboxgreen", // 47
         "com.accents.xiaomiorange", // 48
-        "com.google.android.apps.nexuslauncher.overlay",
         "com.android.system.theme.dark",
         "com.android.settings.theme.dark",
         "com.android.sysui.theme.dark",
@@ -139,15 +138,6 @@ public class ThemeAccentUtils {
         "com.android.settings.theme.dark",
         "com.android.sysui.theme.dark",
     };
-
-    // Init core overlay
-    public static void initCoreOverlay(IOverlayManager om, int userId) {
-        try {
-            om.setEnabled("com.google.android.apps.nexuslauncher.overlay",
-                        true, userId);
-        } catch (RemoteException e) {
-        }
-    }
 
     // Unloads the dark themes
     private static void unloadDarkThemes(IOverlayManager om, int userId) {

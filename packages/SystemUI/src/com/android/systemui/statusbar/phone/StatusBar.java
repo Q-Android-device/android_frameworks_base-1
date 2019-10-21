@@ -781,8 +781,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             ex.rethrowFromSystemServer();
         }
 
-        initCoreOverlays();
-
         createAndAddWindows(result);
 
         // Make sure we always have the most current wallpaper info.
@@ -3512,12 +3510,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     // Check for the dark system theme
     public boolean isUsingDarkSystemTheme() {
         return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-    }
-
-    private void initCoreOverlays() {
-        mUiOffloadThread.submit(() -> {
-            ThemeAccentUtils.initCoreOverlay(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-        });
     }
 
     private void updateCorners() {
